@@ -447,6 +447,8 @@ step-maybe-trigger-arm-test: &step-maybe-trigger-arm-test
       fi
 
 step-maybe-disable-auto-login: &step-maybe-disable-auto-login
+  run:
+    name: Disable auto login on MacOS
     command: |
       if [ "`uname`" == "Darwin" ]; then
         sudo defaults delete /Library/Preferences/com.apple.loginwindow autoLoginUser
