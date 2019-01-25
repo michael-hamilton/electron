@@ -446,15 +446,6 @@ step-maybe-trigger-arm-test: &step-maybe-trigger-arm-test
         node electron/script/ci-release-build.js --job=electron-$TARGET_ARCH-testing --ci=VSTS --armTest --circleBuildNum=$CIRCLE_BUILD_NUM $CIRCLE_BRANCH
       fi
 
-step-maybe-disable-auto-login: &step-maybe-disable-auto-login
-  run:
-    name: Disable auto login on MacOS
-    command: |
-      if [ "`uname`" == "Darwin" ]; then
-        sudo defaults delete /Library/Preferences/com.apple.loginwindow autoLoginUser
-        sudo defaults delete /Library/Preferences/com.apple.loginwindow autoLoginUserScreenLocked
-      fi
-
 # Lists of steps.
 steps-checkout: &steps-checkout
   steps:
@@ -696,7 +687,6 @@ steps-tests: &steps-tests
     - *step-mksnapshot-unzip
     - *step-setup-linux-for-headless-testing
     - *step-install-nodejs-on-mac
-    - *step-maybe-disable-auto-login
 
     - run:
         name: Run Electron tests
@@ -1155,6 +1145,7 @@ jobs:
       <<: *env-mac-large
       <<: *env-stack-dumping
       <<: *env-send-slack-notifications
+      <<: *env-disable-crash-reporter-tests
     <<: *steps-tests
 
   osx-verify-ffmpeg:
